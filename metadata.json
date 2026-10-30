@@ -1,0 +1,8 @@
+{
+  "name": "GRESALUD | Agenda de Consultas Médicas",
+  "description": "Sistema oficial de agenda y reservas de consultas médicas de la Dra. Grecia Osuna en GRESALUD.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
