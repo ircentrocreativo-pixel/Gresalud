@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, Search, FlaskConical, ShieldCheck, QrCode } from 'lucide-react';
+import { Calendar, Search, FlaskConical, ShieldCheck, QrCode, Instagram } from 'lucide-react';
 
 interface HeaderProps {
   currentTab: 'agendar' | 'consultar' | 'laboratorio' | 'recepcion' | 'medico';
@@ -11,14 +11,14 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
+        <div className="flex items-center justify-between min-h-20 sm:min-h-24 py-2 gap-4">
           
           {/* Zone 1: Brand Wordmark with original GRESALUD SVG Logo */}
           <button
             onClick={() => onSelectTab('agendar')}
-            className="flex items-center gap-3 text-left group cursor-pointer focus:outline-none"
+            className="flex items-center gap-3 sm:gap-4 text-left group cursor-pointer focus:outline-none"
           >
-            <div className="h-12 w-12 rounded-xl bg-white flex items-center justify-center p-1 border border-slate-100 shadow-xs overflow-hidden">
+            <div className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-2xl bg-white flex items-center justify-center p-1.5 border border-slate-200 shadow-sm overflow-hidden shrink-0 transition-transform group-hover:scale-105">
               <img
                 src="/assets/aistudio/CV_Creativo_Isveida_Rojas_e31b86f8.svg"
                 alt="Logo GRESALUD"
@@ -28,14 +28,14 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-bold tracking-tight text-[#0B3E50] font-heading group-hover:text-[#20AAA8] transition-colors">
+                <span className="text-2xl sm:text-3xl font-black tracking-tight text-[#0B3E50] font-heading group-hover:text-[#20AAA8] transition-colors">
                   GRESALUD
                 </span>
-                <span className="hidden sm:inline-block text-xs font-semibold text-[#20AAA8] bg-[#20AAA8]/10 px-2 py-0.5 rounded-sm">
+                <span className="hidden sm:inline-block text-xs font-semibold text-[#20AAA8] bg-[#20AAA8]/10 px-2 py-0.5 rounded-md">
                   Consultas Médicas
                 </span>
               </div>
-              <p className="text-xs text-slate-500 font-medium tracking-wide">
+              <p className="text-xs sm:text-sm text-slate-600 font-bold tracking-wider">
                 DRA. GRECIA OSUNA
               </p>
             </div>
@@ -82,6 +82,16 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
 
           {/* Zone 3: Primary Action & Privileged Access Menu */}
           <div className="flex items-center gap-2 sm:gap-3">
+            <a
+              href="https://www.instagram.com/tudrafavoritagrecia/"
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Instagram: @tudrafavoritagrecia"
+              className="p-2.5 text-[#F26F5B] hover:text-[#0B3E50] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer border border-slate-200"
+            >
+              <Instagram className="w-4 h-4" />
+            </a>
+
             <button
               onClick={onOpenQR}
               title="Escanear QR o Compartir enlace"
