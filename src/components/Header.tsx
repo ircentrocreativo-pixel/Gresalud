@@ -41,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
             </div>
           </button>
 
-          {/* Zone 2: Navigation Links (single line, clean text) */}
+          {/* Zone 2: Navigation Links */}
           <nav className="hidden md:flex items-center gap-1 lg:gap-2">
             <button
               onClick={() => onSelectTab('agendar')}
@@ -80,7 +80,7 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
             </button>
           </nav>
 
-          {/* Zone 3: Primary Action & Privileged Access Menu */}
+          {/* Zone 3: Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
             <a
               href="https://www.instagram.com/tudrafavoritagrecia/"
