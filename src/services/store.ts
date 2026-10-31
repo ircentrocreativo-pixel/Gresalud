@@ -90,8 +90,8 @@ export const SPECIALTIES: Specialty[] = [
     name: 'Traumatología',
     tagline: 'Evaluación articular, muscular y ósea para tu movilidad',
     description:
-      'Evaluación y tratamiento de lesiones y molestias en huesos, músculos y articulaciones para cuidar tu movilidad y calidad de vida.',
-    image: '/assets/images/traumatologia_consulta_1793391067134.jpg',
+      'Evaluación y tratamiento de lesiones y molestias en huesos, músculos y articulaciones para cuidar tu movilidad con planes personalizados.',
+    image: 'https://images.unsplash.com/photo-1579684385127-1ef15d508118?auto=format&fit=crop&w=800&q=80',
     price: 55,
     currency: 'USD',
     durationMinutes: 30,
