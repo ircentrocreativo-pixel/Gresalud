@@ -91,7 +91,7 @@ export const SPECIALTIES: Specialty[] = [
     tagline: 'Evaluación articular, muscular y ósea para tu movilidad',
     description:
       'Evaluación y tratamiento de lesiones y molestias en huesos, músculos y articulaciones para cuidar tu movilidad con planes personalizados.',
-    image: '/assets/aistudio/Consulta_de_rodilla_en_traumatolog_a_134fd713.png',,
+    image: '/assets/aistudio/Consulta_de_rodilla_en_traumatolog_a_134fd713.png',
     price: 55,
     currency: 'USD',
     durationMinutes: 30,
