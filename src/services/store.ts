@@ -85,7 +85,7 @@ export const SPECIALTIES: Specialty[] = [
     durationMinutes: 30,
     iconName: 'Brain',
   },
- {
+  {
     id: 'traumatologia',
     name: 'Traumatología',
     tagline: 'Evaluación articular, muscular y ósea para tu movilidad',
@@ -110,7 +110,24 @@ export const SPECIALTIES: Specialty[] = [
     durationMinutes: 30,
     iconName: 'UserCheck',
   },
-];    specialtyName: 'Traumatología',
+];
+
+export const INITIAL_DOCTORS: Doctor[] = [
+  {
+    id: 'doc-grecia-osuna',
+    name: 'Dra. Grecia Osuna',
+    title: 'Médico Internista - Directora Médica GRESALUD',
+    specialtyId: 'medicina_interna',
+    specialtyName: 'Medicina Interna',
+    email: 'dra.grecia@gresalud.com',
+    phone: '+58 414-902-1100',
+  },
+  {
+    id: 'doc-carlos-mendoza',
+    name: 'Dr. Carlos Mendoza',
+    title: 'Especialista en Traumatología y Cirugía Ortopédica',
+    specialtyId: 'traumatologia',
+    specialtyName: 'Traumatología',
     email: 'dr.mendoza@gresalud.com',
     phone: '+58 414-902-1101',
   },
@@ -177,8 +194,10 @@ export const DEFAULT_CONFIG: ClinicConfig = {
   onlineHoldMinutes: 10,
   depositPercentage: 10,
   allowSameDayBookings: false,
-  address: 'Centro Médico GRESALUD, Av. Principal, Piso 3, Consultorio 302',
-  phoneWhatsapp: '+58 412-473-7258',
+  phoneWhatsapp: '0412-3697465',
+  phones: ['0412-3697465', '0412-9601785'],
+  instagramUrl: 'https://www.instagram.com/tudrafavoritagrecia/',
+  instagramHandle: '@tudrafavoritagrecia',
 };
 
 // Seed realistic initial appointments for demonstration of operational state
