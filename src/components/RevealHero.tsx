@@ -204,12 +204,12 @@ export const RevealHero: React.FC<RevealHeroProps> = ({
       <div className="mt-4 bg-[#0B3E50] p-4 sm:p-6 rounded-2xl border border-white/10 shadow-xl text-white">
         <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
           <div className="space-y-1.5 max-w-2xl">
-            <div className="inline-flex items-center gap-2 bg-white/15 px-2.5 py-0.5 rounded-full text-white text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#20AAA8]"></span>
+            <div className="panel-glass inline-flex items-center gap-2 px-3 py-1 rounded-full text-white text-[11px] sm:text-xs font-bold uppercase tracking-wider shadow-md">
+              <span className="w-2 h-2 rounded-full bg-[#20d6c7] animate-pulse shadow-[0_0_8px_#20d6c7]"></span>
               Agenda Médica Oficial
             </div>
 
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold font-heading text-white tracking-tight leading-snug">
+            <h1 className="titulo-glow text-xl sm:text-2xl lg:text-3xl font-bold font-heading text-white tracking-tight leading-snug">
               Selecciona tu especialidad
             </h1>
 
@@ -221,11 +221,11 @@ export const RevealHero: React.FC<RevealHeroProps> = ({
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1 lg:pt-0 shrink-0">
             <button
               onClick={onStartBooking}
-              className="flex-1 sm:flex-none px-5 py-3 rounded-xl bg-[#20AAA8] hover:bg-[#18918f] text-white font-semibold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.98]"
+              className="btn-agendar-glow flex-1 sm:flex-none px-6 py-3.5 rounded-xl bg-[#20AAA8] hover:bg-[#18918f] font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.98]"
             >
-              <Calendar className="w-4 h-4" />
-              <span>Agendar mi cita</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              <Calendar className="w-4 h-4 text-[#fff6e8]" />
+              <span className="tracking-wide">Agendar mi cita</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#fff6e8] group-hover:translate-x-1 transition-transform" />
             </button>
 
             <button

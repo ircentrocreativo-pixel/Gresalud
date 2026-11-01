@@ -32,3 +32,65 @@ h1, h2, h3, h4, .font-heading {
   border-radius: 1.25rem;
   background-color: #0B3E50;
 }
+
+/* Título con glow controlado */
+.titulo-glow {
+  margin: 0;
+  font-size: clamp(32px, 6vw, 64px);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: #fff6e8;
+  text-shadow:
+    0 0 6px rgba(245, 201, 0, 0.55),   /* glow cercano */
+    0 0 22px rgba(245, 201, 0, 0.35),  /* glow difuso */
+    0 0 48px rgba(255, 122, 89, 0.2);  /* halo cálido */
+  overflow-wrap: anywhere; /* evita desbordes en móvil */
+}
+
+/* Versión para fondos claros: texto oscuro, glow más sutil */
+.titulo-glow--claro {
+  color: #1f2230;
+  text-shadow:
+    0 0 10px rgba(245, 201, 0, 0.45),
+    0 0 28px rgba(245, 201, 0, 0.25);
+}
+
+/* Fondo con color para que el cristal se note */
+.fondo-glass {
+  background:
+    radial-gradient(circle at 20% 25%, #20d6c7 0%, transparent 35%),
+    radial-gradient(circle at 80% 70%, #ff7a59 0%, transparent 35%),
+    linear-gradient(135deg, #7b5cff, #4d6bff);
+}
+
+/* Panel de cristal */
+.panel-glass {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border-radius: 20px;
+  box-shadow: 0 10px 32px rgba(31, 34, 48, 0.18);
+  color: #ffffff;
+}
+
+/* Respaldo si el navegador no soporta backdrop-filter */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .panel-glass {
+    background: rgba(31, 34, 48, 0.72);
+  }
+}
+
+/* Botón con efecto glow controlado para agendar cita */
+.btn-agendar-glow {
+  color: #fff6e8 !important;
+  text-shadow:
+    0 0 6px rgba(245, 201, 0, 0.7),
+    0 0 18px rgba(245, 201, 0, 0.45),
+    0 0 32px rgba(255, 122, 89, 0.3) !important;
+  box-shadow:
+    0 0 20px rgba(32, 170, 168, 0.5),
+    0 6px 20px rgba(11, 62, 80, 0.3) !important;
+}
+

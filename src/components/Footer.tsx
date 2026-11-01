@@ -20,10 +20,9 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
             <div className="flex items-center gap-4">
               <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-white flex items-center justify-center p-2 shadow-md shrink-0">
                 <img
-                  src="/assets/aistudio/CV_Creativo_Isveida_Rojas_e31b86f8.svg"
+                  src="/gresalud_icon.png"
                   alt="Logo GRESALUD"
                   className="w-full h-full object-contain"
-                  referrerPolicy="no-referrer"
                 />
               </div>
               <div>

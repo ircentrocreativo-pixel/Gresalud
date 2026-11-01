@@ -181,7 +181,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
     }, 100);
   };
 
-  // Validation before going to Step 3
+  // Validation before going to Step 3 (Datos del paciente)
   const handleProceedToData = () => {
     if (!selectedDate) {
       setFormError('Por favor selecciona una fecha para tu consulta.');
@@ -193,6 +193,16 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
     }
     setFormError(null);
     setCurrentStep(3);
+
+    // Desplazar automáticamente hacia el formulario de datos del paciente
+    setTimeout(() => {
+      const el = document.getElementById('step-patient-data') || document.getElementById('booking-wizard-step-header') || document.getElementById('booking-wizard-container');
+      if (el) {
+        const yOffset = -90;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   // Validation before going to Step 4 (Hold acquisition)
@@ -248,7 +258,42 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
     setActiveHold(holdRes.hold || null);
     setHoldSecondsLeft(600);
     setCurrentStep(4);
+
+    setTimeout(() => {
+      const el = document.getElementById('step-payment-confirmation') || document.getElementById('booking-wizard-step-header');
+      if (el) {
+        const yOffset = -90;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }, 50);
   };
+
+  // Auto-scroll watcher whenever currentStep changes to step 3, 4, or 5
+  useEffect(() => {
+    if (currentStep === 3) {
+      const el = document.getElementById('step-patient-data') || document.getElementById('booking-wizard-step-header');
+      if (el) {
+        const yOffset = -90;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    } else if (currentStep === 4) {
+      const el = document.getElementById('step-payment-confirmation') || document.getElementById('booking-wizard-step-header');
+      if (el) {
+        const yOffset = -90;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    } else if (currentStep === 5) {
+      const el = document.getElementById('step-confirmation-success') || document.getElementById('booking-wizard-step-header');
+      if (el) {
+        const yOffset = -90;
+        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }
+  }, [currentStep]);
 
   // Final Confirmation
   const handleFinalSubmit = () => {
@@ -360,16 +405,27 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
   const balance90 = Number((totalCost - deposit10).toFixed(2));
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <div id="booking-wizard-container" className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       {/* Step Header with Back Button */}
       {currentStep < 5 && (
-        <div className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
+        <div id="booking-wizard-step-header" className="flex items-center justify-between mb-8 pb-4 border-b border-slate-200">
           <div className="flex items-center gap-3">
             {currentStep > 1 && (
               <button
                 onClick={() => {
                   setFormError(null);
-                  setCurrentStep((prev) => prev - 1);
+                  setCurrentStep((prev) => {
+                    const prevStep = prev - 1;
+                    setTimeout(() => {
+                      const el = document.getElementById('booking-wizard-step-header');
+                      if (el) {
+                        const yOffset = -90;
+                        const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+                      }
+                    }, 50);
+                    return prevStep;
+                  });
                 }}
                 className="p-2 text-slate-500 hover:text-[#0B3E50] hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
                 title="Volver al paso anterior"
@@ -651,9 +707,9 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
               <button
                 disabled={!selectedDate || !selectedTime || slotsLoading}
                 onClick={handleProceedToData}
-                className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`w-full py-4 px-6 rounded-xl font-extrabold text-sm sm:text-base transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   selectedTime
-                    ? 'bg-[#20AAA8] hover:bg-[#18918f] text-white scale-100'
+                    ? 'bg-[#20AAA8] hover:bg-[#18918f] btn-agendar-glow scale-100 shadow-xl'
                     : 'bg-slate-200 text-slate-500 cursor-not-allowed'
                 }`}
               >
@@ -662,7 +718,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                     ? `Apartar cita para las ${selectedTime} y continuar`
                     : '👆 Toca una hora disponible arriba para continuar'}
                 </span>
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-5 h-5" />
               </button>
             </div>
 
@@ -675,10 +731,10 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
         <div className="fixed bottom-4 left-4 right-4 z-40 sm:hidden">
           <button
             onClick={handleProceedToData}
-            className="w-full py-4 px-5 rounded-2xl bg-[#20AAA8] text-white font-extrabold text-sm shadow-2xl flex items-center justify-between border-2 border-white ring-4 ring-[#20AAA8]/30 animate-pulse cursor-pointer"
+            className="btn-agendar-glow w-full py-4 px-5 rounded-2xl bg-[#20AAA8] font-black text-sm shadow-2xl flex items-center justify-between border-2 border-white ring-4 ring-[#20AAA8]/40 cursor-pointer"
           >
-            <span>✓ Horario {selectedTime} elegido</span>
-            <span className="flex items-center gap-1.5 bg-[#0B3E50] px-3.5 py-1.5 rounded-xl">
+            <span className="font-bold">✓ Horario {selectedTime} elegido</span>
+            <span className="flex items-center gap-1.5 bg-[#0B3E50] text-[#fff6e8] px-4 py-2 rounded-xl text-xs font-black shadow-inner">
               Apartar cita <ChevronRight className="w-4 h-4" />
             </span>
           </button>
@@ -689,7 +745,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
       {/* PASO 3: FORMULARIO DE DATOS DEL PACIENTE                       */}
       {/* ============================================================== */}
       {currentStep === 3 && (
-        <div className="max-w-3xl mx-auto bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div id="step-patient-data" className="max-w-3xl mx-auto bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
           
           {/* Quick Recap Header */}
           <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 flex flex-wrap items-center justify-between gap-3 text-xs">
@@ -1197,7 +1253,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
       {/* PASO 4: ABONO DEL 10% Y CONFIRMACIÓN                           */}
       {/* ============================================================== */}
       {currentStep === 4 && (
-        <div className="max-w-2xl mx-auto bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
+        <div id="step-payment-confirmation" className="max-w-2xl mx-auto bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm space-y-6">
           
           {/* 10-Minute Hold Active Banner */}
           <div className="p-4 rounded-xl bg-amber-50 border border-amber-200 flex items-center justify-between gap-3 text-xs text-amber-900">
@@ -1376,7 +1432,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
               type="button"
               disabled={isSubmitting}
               onClick={handleFinalSubmit}
-              className="px-6 py-3.5 rounded-xl bg-[#20AAA8] hover:bg-[#18918f] disabled:bg-slate-300 text-white font-semibold text-sm sm:text-base shadow-md transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
+              className="btn-agendar-glow px-7 py-4 rounded-xl bg-[#20AAA8] hover:bg-[#18918f] disabled:bg-slate-300 font-extrabold text-sm sm:text-base shadow-xl transition-all flex items-center gap-2 cursor-pointer active:scale-[0.98]"
             >
               {isSubmitting ? (
                 <>
@@ -1385,7 +1441,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                 </>
               ) : (
                 <>
-                  <CheckCircle2 className="w-5 h-5" />
+                  <CheckCircle2 className="w-5 h-5 text-[#fff6e8]" />
                   <span>Realizar Abono y Agendar Cita</span>
                 </>
               )}
@@ -1399,7 +1455,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
       {/* PASO 5: RESERVA CONFIRMADA EXITOSA                             */}
       {/* ============================================================== */}
       {currentStep === 5 && confirmedAppointment && (
-        <div className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl space-y-6">
+        <div id="step-confirmation-success" className="max-w-2xl mx-auto bg-white rounded-3xl p-6 sm:p-10 border border-slate-200 shadow-xl space-y-6">
           
           <div className="text-center space-y-2">
             <div className="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">

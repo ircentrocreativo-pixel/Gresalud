@@ -20,10 +20,9 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
           >
             <div className="h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 rounded-2xl bg-white flex items-center justify-center p-1.5 border border-slate-200 shadow-sm overflow-hidden shrink-0 transition-transform group-hover:scale-105">
               <img
-                src="/assets/aistudio/CV_Creativo_Isveida_Rojas_e31b86f8.svg"
+                src="/gresalud_icon.png"
                 alt="Logo GRESALUD"
                 className="w-full h-full object-contain"
-                referrerPolicy="no-referrer"
               />
             </div>
             <div>
@@ -45,9 +44,9 @@ export const Header: React.FC<HeaderProps> = ({ currentTab, onSelectTab, onOpenQ
           <nav className="hidden md:flex items-center gap-1 lg:gap-2">
             <button
               onClick={() => onSelectTab('agendar')}
-              className={`px-3.5 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-2 cursor-pointer ${
+              className={`px-3.5 py-2 text-sm font-semibold rounded-lg transition-all flex items-center gap-2 cursor-pointer ${
                 currentTab === 'agendar'
-                  ? 'bg-[#0B3E50] text-white shadow-xs'
+                  ? 'bg-[#20AAA8] btn-agendar-glow shadow-sm'
                   : 'text-slate-600 hover:text-[#0B3E50] hover:bg-slate-100'
               }`}
             >
