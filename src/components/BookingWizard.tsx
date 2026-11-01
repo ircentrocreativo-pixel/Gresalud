@@ -25,6 +25,23 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
+const BIRTH_YEARS = Array.from({ length: 105 }, (_, i) => 2026 - i);
+const BIRTH_DAYS = Array.from({ length: 31 }, (_, i) => String(i + 1).padStart(2, '0'));
+const BIRTH_MONTHS = [
+  { val: '01', label: '01 - Enero' },
+  { val: '02', label: '02 - Febrero' },
+  { val: '03', label: '03 - Marzo' },
+  { val: '04', label: '04 - Abril' },
+  { val: '05', label: '05 - Mayo' },
+  { val: '06', label: '06 - Junio' },
+  { val: '07', label: '07 - Julio' },
+  { val: '08', label: '08 - Agosto' },
+  { val: '09', label: '09 - Septiembre' },
+  { val: '10', label: '10 - Octubre' },
+  { val: '11', label: '11 - Noviembre' },
+  { val: '12', label: '12 - Diciembre' },
+];
+
 interface BookingWizardProps {
   initialSpecialtyId?: SpecialtyId;
   onBookingCompleted: (appointment: Appointment) => void;
@@ -61,6 +78,11 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
   const [patientPhone, setPatientPhone] = useState<string>('');
   const [patientEmail, setPatientEmail] = useState<string>('');
   const [patientBirthDate, setPatientBirthDate] = useState<string>('');
+  const [patientAgeInput, setPatientAgeInput] = useState<string>('');
+  const [ageEntryMode, setAgeEntryMode] = useState<'manual_years' | 'quick_dropdown' | 'native_calendar'>('manual_years');
+  const [birthDay, setBirthDay] = useState<string>('');
+  const [birthMonth, setBirthMonth] = useState<string>('');
+  const [birthYear, setBirthYear] = useState<string>('');
   const [reason, setReason] = useState<string>('');
 
   // Minor / Third party
@@ -146,11 +168,17 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
     return () => clearInterval(interval);
   }, [activeHold]);
 
-  // Specialty change handler (wipes time per rule 7)
+  // Specialty change handler (wipes time per rule 7 and scrolls to calendar on mobile)
   const handleSelectSpecialty = (s: Specialty) => {
     setSelectedSpecialty(s);
     setSelectedTime('');
     setFormError(null);
+    setTimeout(() => {
+      const calendarEl = document.getElementById('calendar-and-slots-section');
+      if (calendarEl && window.innerWidth < 1024) {
+        calendarEl.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   // Validation before going to Step 3
@@ -234,9 +262,12 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
     }
 
     setTimeout(() => {
-      // Calculate age if birthdate provided
+      // Calculate age if direct manual age or birthdate provided
       let calculatedAge: number | undefined = undefined;
-      if (patientBirthDate) {
+      const parsedManualAge = parseInt(patientAgeInput, 10);
+      if (!isNaN(parsedManualAge) && parsedManualAge >= 0 && parsedManualAge <= 120) {
+        calculatedAge = parsedManualAge;
+      } else if (patientBirthDate) {
         const b = new Date(patientBirthDate);
         const ageDifMs = Date.now() - b.getTime();
         const ageDate = new Date(ageDifMs);
@@ -415,8 +446,9 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         referrerPolicy="no-referrer"
                         onError={(e) => {
-                          // Fallback to stylized SVG placeholder if asset fails
-                          (e.target as HTMLElement).style.display = 'none';
+                          const target = e.target as HTMLImageElement;
+                          target.onerror = null;
+                          target.src = 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=800&q=80';
                         }}
                       />
                       <div className="absolute inset-0 bg-[#0B3E50]/10" />
@@ -424,18 +456,18 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
 
                     {/* Details */}
                     <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-2">
-                        <h4 className="text-base font-bold text-[#0B3E50] truncate font-heading">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1">
+                        <h4 className="text-sm sm:text-base font-bold text-[#0B3E50] font-heading leading-tight break-words">
                           {s.name}
                         </h4>
-                        <div className="text-right shrink-0">
-                          <span className="text-sm font-bold text-[#0B3E50]">
+                        <div className="text-left sm:text-right shrink-0">
+                          <span className="text-xs sm:text-sm font-extrabold text-[#0B3E50]">
                             ${s.price} {s.currency}
                           </span>
                         </div>
                       </div>
 
-                      <p className="text-xs font-medium text-[#20AAA8] mt-0.5">
+                      <p className="text-xs font-semibold text-[#20AAA8] mt-0.5">
                         {s.tagline}
                       </p>
 
@@ -443,22 +475,27 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                         {s.description}
                       </p>
 
-                      <div className="mt-2 flex items-center gap-3 text-[11px] text-slate-400">
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] text-slate-500">
                         <span>Duración: {s.durationMinutes} min</span>
                         <span>·</span>
-                        <span className="text-[#0B3E50] font-medium">Abono 10%: ${(s.price * 0.1).toFixed(2)}</span>
+                        <span className="text-[#0B3E50] font-semibold">Abono 10%: ${(s.price * 0.1).toFixed(2)}</span>
+                        {isSelected && (
+                          <span className="text-[10px] font-bold text-white bg-[#20AAA8] px-2 py-0.5 rounded-full ml-auto">
+                            ✓ Seleccionada
+                          </span>
+                        )}
                       </div>
                     </div>
 
                     {/* Radio indicator */}
                     <div
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
+                      className={`w-6 h-6 rounded-full border-2 flex items-center justify-center shrink-0 transition-colors ${
                         isSelected
-                          ? 'border-[#20AAA8] bg-[#20AAA8]'
-                          : 'border-slate-300'
+                          ? 'border-[#20AAA8] bg-[#20AAA8] text-white shadow-xs'
+                          : 'border-slate-300 bg-white'
                       }`}
                     >
-                      {isSelected && <div className="w-2 h-2 rounded-full bg-white" />}
+                      {isSelected && <div className="w-2.5 h-2.5 rounded-full bg-white" />}
                     </div>
                   </button>
                 );
@@ -467,7 +504,10 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
           </div>
 
           {/* RIGHT COLUMN: CALENDAR AND TIME SLOTS */}
-          <div className="lg:col-span-6 bg-white rounded-2xl p-6 border border-slate-200/90 shadow-sm space-y-6">
+          <div
+            id="calendar-and-slots-section"
+            className="lg:col-span-6 bg-white rounded-2xl p-4 sm:p-6 border border-slate-200/90 shadow-sm space-y-6 scroll-mt-24"
+          >
             
             {/* Summary Header of Selected Specialty */}
             <div className="p-4 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between gap-4">
@@ -726,16 +766,231 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1">
-                Fecha de nacimiento (Para registro médico)
-              </label>
-              <input
-                type="date"
-                value={patientBirthDate}
-                onChange={(e) => setPatientBirthDate(e.target.value)}
-                className="w-full sm:w-1/2 px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#20AAA8] focus:outline-none text-sm bg-white"
-              />
+            {/* Dual Age & Birth Date Selector */}
+            <div className="p-4 rounded-2xl bg-slate-50/90 border border-slate-200/90 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                <label className="block text-xs font-bold text-[#0B3E50]">
+                  Edad del Paciente o Fecha de Nacimiento <span className="text-slate-400 font-normal">(Para historial clínico)</span>
+                </label>
+
+                {/* Segmented Mode Picker */}
+                <div className="inline-flex bg-slate-200/90 p-0.5 rounded-lg text-xs font-medium self-start sm:self-auto">
+                  <button
+                    type="button"
+                    onClick={() => setAgeEntryMode('manual_years')}
+                    className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                      ageEntryMode === 'manual_years'
+                        ? 'bg-white text-[#0B3E50] font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    ✍️ Escribir edad
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAgeEntryMode('quick_dropdown')}
+                    className={`px-3 py-1 rounded-md transition-all cursor-pointer ${
+                      ageEntryMode === 'quick_dropdown'
+                        ? 'bg-white text-[#0B3E50] font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    📅 Elegir Año/Mes (1 clic)
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setAgeEntryMode('native_calendar')}
+                    className={`px-2.5 py-1 rounded-md transition-all cursor-pointer ${
+                      ageEntryMode === 'native_calendar'
+                        ? 'bg-white text-[#0B3E50] font-bold shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Calendario
+                  </button>
+                </div>
+              </div>
+
+              {/* Modo 1: Escribir edad directamente en años */}
+              {ageEntryMode === 'manual_years' && (
+                <div className="space-y-2">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="relative w-36">
+                      <input
+                        type="number"
+                        min="0"
+                        max="120"
+                        placeholder="Ej. 34"
+                        value={patientAgeInput}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          setPatientAgeInput(val);
+                          const num = parseInt(val, 10);
+                          if (!isNaN(num) && num >= 0 && num <= 120) {
+                            const estY = 2026 - num;
+                            setBirthYear(String(estY));
+                            setBirthMonth('06');
+                            setBirthDay('15');
+                            setPatientBirthDate(`${estY}-06-15`);
+                          } else if (!val) {
+                            setPatientBirthDate('');
+                          }
+                        }}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#20AAA8] focus:outline-none text-sm font-semibold bg-white"
+                      />
+                      <span className="absolute right-3 top-2.5 text-xs text-slate-400 font-medium pointer-events-none">
+                        años
+                      </span>
+                    </div>
+
+                    {patientAgeInput && parseInt(patientAgeInput, 10) >= 0 && (
+                      <div className="text-xs text-emerald-800 bg-emerald-50 px-3 py-2 rounded-xl border border-emerald-200 flex items-center gap-1.5">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                        <span>
+                          Registrado: <strong>{patientAgeInput} años</strong> (Año aprox. {2026 - parseInt(patientAgeInput, 10)})
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    Escribe directamente la edad sin perder tiempo retrocediendo años en el calendario.
+                  </p>
+                </div>
+              )}
+
+              {/* Modo 2: Selector Rápido con Año, Mes y Día en lista desplegable */}
+              {ageEntryMode === 'quick_dropdown' && (
+                <div className="space-y-2">
+                  <div className="grid grid-cols-3 gap-2 sm:gap-3 max-w-lg">
+                    {/* Año (primero para elegir rápidamente el año de nacimiento) */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Año</label>
+                      <select
+                        value={birthYear}
+                        onChange={(e) => {
+                          const y = e.target.value;
+                          setBirthYear(y);
+                          if (y) {
+                            const m = birthMonth || '06';
+                            const d = birthDay || '15';
+                            const dateStr = `${y}-${m}-${d}`;
+                            setPatientBirthDate(dateStr);
+                            const b = new Date(dateStr);
+                            const ageDifMs = Date.now() - b.getTime();
+                            const calc = Math.abs(new Date(ageDifMs).getUTCFullYear() - 1970);
+                            if (!isNaN(calc)) setPatientAgeInput(String(calc));
+                          }
+                        }}
+                        className="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:ring-2 focus:ring-[#20AAA8] font-bold text-[#0B3E50]"
+                      >
+                        <option value="">-- Año --</option>
+                        {BIRTH_YEARS.map((y) => (
+                          <option key={y} value={y}>{y}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Mes */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Mes</label>
+                      <select
+                        value={birthMonth}
+                        onChange={(e) => {
+                          const m = e.target.value;
+                          setBirthMonth(m);
+                          if (birthYear && m) {
+                            const d = birthDay || '15';
+                            const dateStr = `${birthYear}-${m}-${d}`;
+                            setPatientBirthDate(dateStr);
+                            const b = new Date(dateStr);
+                            const ageDifMs = Date.now() - b.getTime();
+                            const calc = Math.abs(new Date(ageDifMs).getUTCFullYear() - 1970);
+                            if (!isNaN(calc)) setPatientAgeInput(String(calc));
+                          }
+                        }}
+                        className="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:ring-2 focus:ring-[#20AAA8]"
+                      >
+                        <option value="">-- Mes --</option>
+                        {BIRTH_MONTHS.map((m) => (
+                          <option key={m.val} value={m.val}>{m.label}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    {/* Día */}
+                    <div>
+                      <label className="block text-[11px] font-semibold text-slate-600 mb-0.5">Día</label>
+                      <select
+                        value={birthDay}
+                        onChange={(e) => {
+                          const d = e.target.value;
+                          setBirthDay(d);
+                          if (birthYear && birthMonth && d) {
+                            const dateStr = `${birthYear}-${birthMonth}-${d}`;
+                            setPatientBirthDate(dateStr);
+                            const b = new Date(dateStr);
+                            const ageDifMs = Date.now() - b.getTime();
+                            const calc = Math.abs(new Date(ageDifMs).getUTCFullYear() - 1970);
+                            if (!isNaN(calc)) setPatientAgeInput(String(calc));
+                          }
+                        }}
+                        className="w-full px-2.5 py-2 rounded-xl border border-slate-300 text-xs sm:text-sm bg-white focus:ring-2 focus:ring-[#20AAA8]"
+                      >
+                        <option value="">-- Día --</option>
+                        {BIRTH_DAYS.map((d) => (
+                          <option key={d} value={d}>{d}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {patientAgeInput && (
+                    <div className="text-xs text-emerald-800 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 inline-flex items-center gap-1.5">
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>
+                        {birthDay ? `${birthDay}/` : ''}{birthMonth ? `${birthMonth}/` : ''}{birthYear} — <strong>{patientAgeInput} años</strong>
+                      </span>
+                    </div>
+                  )}
+                  <p className="text-[11px] text-slate-500">
+                    Elige tu año de nacimiento en un solo clic sin tener que retroceder mes a mes.
+                  </p>
+                </div>
+              )}
+
+              {/* Modo 3: Calendario nativo del dispositivo */}
+              {ageEntryMode === 'native_calendar' && (
+                <div className="space-y-1.5">
+                  <input
+                    type="date"
+                    value={patientBirthDate}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setPatientBirthDate(val);
+                      if (val) {
+                        const parts = val.split('-');
+                        if (parts.length === 3) {
+                          setBirthYear(parts[0]);
+                          setBirthMonth(parts[1]);
+                          setBirthDay(parts[2]);
+                        }
+                        const b = new Date(val);
+                        const ageDifMs = Date.now() - b.getTime();
+                        const calc = Math.abs(new Date(ageDifMs).getUTCFullYear() - 1970);
+                        if (!isNaN(calc)) setPatientAgeInput(String(calc));
+                      }
+                    }}
+                    className="w-full sm:w-1/2 px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#20AAA8] focus:outline-none text-sm bg-white"
+                  />
+                  {patientAgeInput && (
+                    <span className="text-xs text-emerald-700 font-semibold block">
+                      Edad calculada: {patientAgeInput} años
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
 
             {/* Toggle: Minor or Third Party */}
@@ -1013,7 +1268,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
               </div>
               <div className="text-xs text-slate-700 space-y-1 bg-white p-3 rounded-lg border border-slate-200 font-mono">
                 <div><strong>Banco:</strong> Banesco / Mercantil</div>
-                <div><strong>Pago Móvil:</strong> 0412-4737258 · CI: 19.482.910</div>
+                <div><strong>Pago Móvil:</strong> 0412-3697465 / 0412-9601785 · CI: 19.482.910</div>
                 <div><strong>Titular:</strong> Dra. Grecia Osuna (GRESALUD)</div>
                 <div><strong>Monto del abono (10%):</strong> ${deposit10.toFixed(2)} USD (Tasa BCV del día)</div>
               </div>
@@ -1200,8 +1455,37 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
             </ul>
           </div>
 
+          {/* Direct WhatsApp Notification Button to verify and send data to clinic */}
+          <div className="pt-2">
+            <a
+              href={`https://wa.me/584123697465?text=${encodeURIComponent(
+                `¡Hola GRESALUD! Acabo de registrar mi cita médica oficial:\n\n` +
+                `📋 *Número de Reserva:* ${confirmedAppointment.id}\n` +
+                `🩺 *Especialidad:* ${confirmedAppointment.specialtyName}\n` +
+                `👤 *Paciente:* ${confirmedAppointment.patientName} ${confirmedAppointment.patientLastName}\n` +
+                `🪪 *Cédula:* ${confirmedAppointment.patientDocType}-${confirmedAppointment.patientDocNumber}\n` +
+                `📱 *Teléfono:* ${confirmedAppointment.patientPhone}\n` +
+                `🗓️ *Fecha y Hora:* ${confirmedAppointment.date} a las ${confirmedAppointment.time}\n` +
+                `💵 *Abono (10%):* $${confirmedAppointment.depositAmount} USD\n` +
+                (confirmedAppointment.paymentReference
+                  ? `💳 *Referencia de Pago:* ${confirmedAppointment.paymentReference} (${confirmedAppointment.paymentBank || 'Pago Móvil'})\n`
+                  : '') +
+                `\nPor favor confirmar recepción de los datos. ¡Muchas gracias!`
+              )}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full py-3.5 px-4 rounded-2xl bg-[#25D366] hover:bg-[#1ebd5a] text-white font-bold text-xs sm:text-sm shadow-md transition-all flex items-center justify-center gap-2.5 cursor-pointer text-center group active:scale-[0.98]"
+            >
+              <Phone className="w-4 h-4 fill-white" />
+              <span>Enviar comprobante a GRESALUD por WhatsApp (0412-3697465)</span>
+            </a>
+            <span className="text-[11px] text-slate-500 text-center block mt-1.5">
+              Haz clic para enviar todos los datos de tu reserva directamente al WhatsApp oficial de recepción.
+            </span>
+          </div>
+
           {/* Action Buttons */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <button
               onClick={handleDownloadICS}
               className="py-3 px-4 rounded-xl bg-[#0B3E50] hover:bg-[#082d3b] text-white font-semibold text-xs sm:text-sm shadow-xs transition-colors flex items-center justify-center gap-2 cursor-pointer"

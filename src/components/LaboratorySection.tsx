@@ -138,7 +138,7 @@ export const LaboratorySection: React.FC<LaboratorySectionProps> = ({ onGoToBook
         <div className="lg:col-span-5">
           <div className="rounded-3xl overflow-hidden border border-slate-200 shadow-xl bg-slate-100 relative">
             <img
-              src="/src/assets/images/laboratorio_clinico_1793391067432.jpg"
+              src="/assets/images/laboratorio_clinico_1793391067432.jpg"
               alt="Instalaciones del Laboratorio Clínico GRESALUD"
               className="w-full h-80 sm:h-96 object-cover"
               referrerPolicy="no-referrer"

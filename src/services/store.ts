@@ -116,11 +116,20 @@ export const INITIAL_DOCTORS: Doctor[] = [
   {
     id: 'doc-grecia-osuna',
     name: 'Dra. Grecia Osuna',
-    title: 'Médico Internista - Directora Médica GRESALUD',
+    title: 'Médico Internista & Directora Médica GRESALUD',
     specialtyId: 'medicina_interna',
     specialtyName: 'Medicina Interna',
     email: 'dra.grecia@gresalud.com',
-    phone: '+58 414-902-1100',
+    phone: '0412-3697465',
+  },
+  {
+    id: 'doc-grecia-osuna-med-gen',
+    name: 'Dra. Grecia Osuna',
+    title: 'Médico Cirujano - Atención Primaria y Medicina General',
+    specialtyId: 'medicina_general',
+    specialtyName: 'Medicina General',
+    email: 'dra.grecia@gresalud.com',
+    phone: '0412-3697465',
   },
   {
     id: 'doc-carlos-mendoza',
@@ -129,7 +138,7 @@ export const INITIAL_DOCTORS: Doctor[] = [
     specialtyId: 'traumatologia',
     specialtyName: 'Traumatología',
     email: 'dr.mendoza@gresalud.com',
-    phone: '+58 414-902-1101',
+    phone: '0412-3697465',
   },
   {
     id: 'doc-elena-vargas',
@@ -138,7 +147,7 @@ export const INITIAL_DOCTORS: Doctor[] = [
     specialtyId: 'pediatria',
     specialtyName: 'Pediatría',
     email: 'dra.vargas@gresalud.com',
-    phone: '+58 414-902-1102',
+    phone: '0412-9601785',
   },
   {
     id: 'doc-maria-perez',
@@ -147,7 +156,7 @@ export const INITIAL_DOCTORS: Doctor[] = [
     specialtyId: 'nutricion',
     specialtyName: 'Nutrición',
     email: 'lic.perez@gresalud.com',
-    phone: '+58 414-902-1103',
+    phone: '0412-3697465',
   },
   {
     id: 'doc-sofia-ramirez',
@@ -156,7 +165,7 @@ export const INITIAL_DOCTORS: Doctor[] = [
     specialtyId: 'ginecologia',
     specialtyName: 'Ginecología',
     email: 'dra.ramirez@gresalud.com',
-    phone: '+58 414-902-1104',
+    phone: '0412-9601785',
   },
   {
     id: 'doc-andres-villalobos',
@@ -165,7 +174,7 @@ export const INITIAL_DOCTORS: Doctor[] = [
     specialtyId: 'psiquiatria',
     specialtyName: 'Psiquiatría',
     email: 'dr.villalobos@gresalud.com',
-    phone: '+58 414-902-1105',
+    phone: '0412-3697465',
   },
   {
     id: 'doc-roberto-hernandez',
@@ -174,7 +183,7 @@ export const INITIAL_DOCTORS: Doctor[] = [
     specialtyId: 'medicina_ocupacional',
     specialtyName: 'Medicina Ocupacional',
     email: 'dr.hernandez@gresalud.com',
-    phone: '+58 414-902-1106',
+    phone: '0412-3697465',
   },
 ];
 
@@ -426,7 +435,7 @@ class ClinicStore {
         this.appointments = INITIAL_APPOINTMENTS;
       }
 
-      const storedDoctors = localStorage.getItem('gresalud_doctors_v1');
+      const storedDoctors = localStorage.getItem('gresalud_doctors_v2');
       this.doctors = storedDoctors ? JSON.parse(storedDoctors) : INITIAL_DOCTORS;
 
       const storedBlocks = localStorage.getItem('gresalud_blocks_v1');
@@ -438,8 +447,11 @@ class ClinicStore {
       const storedNotifs = localStorage.getItem('gresalud_notifs_v1');
       this.notifications = storedNotifs ? JSON.parse(storedNotifs) : INITIAL_NOTIFICATIONS;
 
-      const storedConfig = localStorage.getItem('gresalud_config_v1');
+      const storedConfig = localStorage.getItem('gresalud_config_v2');
       this.config = storedConfig ? JSON.parse(storedConfig) : DEFAULT_CONFIG;
+      // Always ensure verified clinic phones
+      this.config.phones = DEFAULT_CONFIG.phones;
+      this.config.phoneWhatsapp = DEFAULT_CONFIG.phoneWhatsapp;
     } catch {
       this.appointments = INITIAL_APPOINTMENTS;
       this.doctors = INITIAL_DOCTORS;

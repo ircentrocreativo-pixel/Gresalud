@@ -169,6 +169,10 @@ export interface ClinicConfig {
   onlineHoldMinutes: number; // 10
   depositPercentage: number; // 10
   allowSameDayBookings: boolean;
-  address: string;
+  address?: string;
   phoneWhatsapp: string;
+  phones: string[];
+  instagramUrl: string;
+  instagramHandle: string;
 }
+

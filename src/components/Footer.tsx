@@ -1,5 +1,5 @@
 import React from 'react';
-import { MapPin, Phone, Clock, Mail, ShieldCheck } from 'lucide-react';
+import { Phone, Clock, Mail, ShieldCheck, Instagram } from 'lucide-react';
 import { clinicStore } from '../services/store';
 
 interface FooterProps {
@@ -17,8 +17,8 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
           
           {/* Brand Col */}
           <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center p-1">
+            <div className="flex items-center gap-4">
+              <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-2xl bg-white flex items-center justify-center p-2 shadow-md shrink-0">
                 <img
                   src="/assets/aistudio/CV_Creativo_Isveida_Rojas_e31b86f8.svg"
                   alt="Logo GRESALUD"
@@ -27,10 +27,10 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
                 />
               </div>
               <div>
-                <span className="text-lg font-bold font-heading tracking-tight text-white block">
+                <span className="text-2xl sm:text-3xl font-black font-heading tracking-tight text-white block">
                   GRESALUD
                 </span>
-                <span className="text-xs text-[#20AAA8] font-medium tracking-wide block">
+                <span className="text-xs sm:text-sm text-[#20AAA8] font-bold tracking-wider block">
                   DRA. GRECIA OSUNA
                 </span>
               </div>
@@ -128,19 +128,41 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
             </ul>
           </div>
 
-          {/* Ubicación & Contacto */}
+          {/* Contacto & Redes */}
           <div className="space-y-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-[#20AAA8]">
-              Ubicación & Contacto
+              Contacto & Redes
             </h4>
-            <ul className="space-y-2 text-xs text-slate-300">
-              <li className="flex items-start gap-2">
-                <MapPin className="w-4 h-4 text-[#20AAA8] shrink-0 mt-0.5" />
-                <span>{config.address}</span>
+            <ul className="space-y-2.5 text-xs text-slate-300">
+              <li className="flex items-center gap-2">
+                <Phone className="w-4 h-4 text-[#20AAA8] shrink-0" />
+                <a
+                  href="tel:04123697465"
+                  className="hover:text-white transition-colors"
+                >
+                  0412-3697465
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Phone className="w-4 h-4 text-[#20AAA8] shrink-0" />
-                <span>{config.phoneWhatsapp}</span>
+                <a
+                  href="tel:04129601785"
+                  className="hover:text-white transition-colors"
+                >
+                  0412-9601785
+                </a>
+              </li>
+              <li className="flex items-center gap-2 pt-1">
+                <Instagram className="w-4 h-4 text-[#F26F5B] shrink-0" />
+                <a
+                  href="https://www.instagram.com/tudrafavoritagrecia/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-white hover:text-[#20AAA8] font-medium transition-colors inline-flex items-center gap-1"
+                >
+                  <span>@tudrafavoritagrecia</span>
+                  <span className="text-[10px] text-slate-400 font-normal">(Instagram)</span>
+                </a>
               </li>
               <li className="flex items-center gap-2">
                 <Mail className="w-4 h-4 text-[#20AAA8] shrink-0" />
