@@ -556,18 +556,43 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
             </div>
 
             {/* Time Slot Grid */}
-            <div>
-              <div className="flex items-center justify-between mb-3">
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-between">
                 <label className="text-sm font-bold text-[#0B3E50] flex items-center gap-2">
                   <Clock className="w-4 h-4 text-[#20AAA8]" />
                   <span>Horarios disponibles ({selectedDate})</span>
                 </label>
-                {selectedTime && (
-                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-sm">
-                    {selectedTime} seleccionado
+                {selectedTime ? (
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-1 rounded-full border border-emerald-300">
+                    ✓ {selectedTime} seleccionado
+                  </span>
+                ) : (
+                  <span className="text-[11px] text-[#20AAA8] font-bold animate-pulse">
+                    Toca una hora abajo ↓
                   </span>
                 )}
               </div>
+
+              {/* Clear visual guidance callout */}
+              {!selectedTime && availableSlots.length > 0 && (
+                <div className="p-2.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-center gap-2">
+                  <span className="text-base">👉</span>
+                  <span><strong>Toca una de las horas disponibles abajo</strong> (ej. 08:30) para apartar tu cupo en Medicina Interna.</span>
+                </div>
+              )}
+
+              {selectedTime && (
+                <div className="p-2.5 rounded-xl bg-emerald-50 border border-emerald-200 text-xs text-emerald-900 flex items-center justify-between">
+                  <span>Has seleccionado: <strong>{selectedTime} ({selectedSpecialty.name})</strong></span>
+                  <button
+                    type="button"
+                    onClick={handleProceedToData}
+                    className="px-3 py-1 bg-[#20AAA8] hover:bg-[#18918f] text-white rounded-lg font-bold text-xs shadow-xs cursor-pointer"
+                  >
+                    Apartar cupo →
+                  </button>
+                </div>
+              )}
 
               {slotsLoading ? (
                 <div className="py-12 text-center text-slate-400 text-sm">
@@ -585,7 +610,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 sm:gap-2.5">
                   {availableSlots.map(({ time, available, reason }) => {
                     const isPicked = selectedTime === time;
                     return (
@@ -594,17 +619,17 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
                         disabled={!available}
                         onClick={() => setSelectedTime(time)}
                         title={!available ? reason : `Pulsar para seleccionar ${time}`}
-                        className={`py-2.5 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border ${
+                        className={`py-3 px-2 rounded-xl text-xs font-semibold transition-all cursor-pointer flex flex-col items-center justify-center gap-0.5 border ${
                           isPicked
-                            ? 'bg-[#0B3E50] text-white border-[#0B3E50] shadow-sm ring-2 ring-[#0B3E50]/20'
+                            ? 'bg-[#0B3E50] text-white border-[#0B3E50] shadow-md ring-2 ring-[#20AAA8] scale-105'
                             : available
-                            ? 'bg-white hover:bg-[#20AAA8]/10 text-slate-800 border-slate-200 hover:border-[#20AAA8]'
+                            ? 'bg-white hover:bg-[#20AAA8]/15 text-slate-800 border-slate-300 hover:border-[#20AAA8] shadow-2xs'
                             : 'bg-slate-100 text-slate-400 border-slate-200 cursor-not-allowed line-through opacity-60'
                         }`}
                       >
                         <span className="text-sm font-bold font-mono">{time}</span>
                         <span className="text-[10px] font-normal">
-                          {isPicked ? 'Elegido' : available ? 'Disponible' : 'Ocupado'}
+                          {isPicked ? '✓ Elegido' : available ? 'Disponible' : 'Ocupado'}
                         </span>
                       </button>
                     );
@@ -614,10 +639,10 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
             </div>
 
             {/* Global Notice of Single Shared Capacity */}
-            <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200 text-xs text-amber-900 flex items-start gap-2.5">
-              <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-start gap-2.5">
+              <Info className="w-4 h-4 text-[#20AAA8] shrink-0 mt-0.5" />
               <div className="leading-relaxed">
-                <strong>Disponibilidad sincronizada:</strong> El consultorio mantiene un único cupo simultáneo compartido entre las especialidades para garantizar atención puntual y sin salas de espera saturadas.
+                <strong>Disponibilidad en tiempo real:</strong> Atención médica personalizada y puntual de 30 minutos sin salas de espera saturadas.
               </div>
             </div>
 
@@ -626,14 +651,37 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
               <button
                 disabled={!selectedDate || !selectedTime || slotsLoading}
                 onClick={handleProceedToData}
-                className="w-full py-3.5 px-6 rounded-xl bg-[#20AAA8] hover:bg-[#18918f] disabled:bg-slate-200 disabled:text-slate-400 disabled:cursor-not-allowed text-white font-semibold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                className={`w-full py-3.5 px-6 rounded-xl font-bold text-sm sm:text-base shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                  selectedTime
+                    ? 'bg-[#20AAA8] hover:bg-[#18918f] text-white scale-100'
+                    : 'bg-slate-200 text-slate-500 cursor-not-allowed'
+                }`}
               >
-                <span>Continuar con mis datos</span>
+                <span>
+                  {selectedTime
+                    ? `Apartar cita para las ${selectedTime} y continuar`
+                    : '👆 Toca una hora disponible arriba para continuar'}
+                </span>
                 <ChevronRight className="w-4 h-4" />
               </button>
             </div>
 
           </div>
+        </div>
+      )}
+
+      {/* Mobile Floating Sticky CTA when slot is chosen */}
+      {selectedTime && currentStep <= 2 && (
+        <div className="fixed bottom-4 left-4 right-4 z-40 sm:hidden">
+          <button
+            onClick={handleProceedToData}
+            className="w-full py-4 px-5 rounded-2xl bg-[#20AAA8] text-white font-extrabold text-sm shadow-2xl flex items-center justify-between border-2 border-white ring-4 ring-[#20AAA8]/30 animate-pulse cursor-pointer"
+          >
+            <span>✓ Horario {selectedTime} elegido</span>
+            <span className="flex items-center gap-1.5 bg-[#0B3E50] px-3.5 py-1.5 rounded-xl">
+              Apartar cita <ChevronRight className="w-4 h-4" />
+            </span>
+          </button>
         </div>
       )}
 

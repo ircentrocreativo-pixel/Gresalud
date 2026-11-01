@@ -99,6 +99,7 @@ export const RevealHero: React.FC<RevealHeroProps> = ({
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            objectPosition: '15% center',
             zIndex: 1,
           }}
           referrerPolicy="no-referrer"
@@ -127,6 +128,7 @@ export const RevealHero: React.FC<RevealHeroProps> = ({
               width: '100%',
               height: '100%',
               objectFit: 'cover',
+              objectPosition: 'center 20%',
             }}
             referrerPolicy="no-referrer"
           />
