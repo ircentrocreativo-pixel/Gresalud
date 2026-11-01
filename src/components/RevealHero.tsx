@@ -220,7 +220,17 @@ export const RevealHero: React.FC<RevealHeroProps> = ({
 
           <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 pt-1 lg:pt-0 shrink-0">
             <button
-              onClick={onStartBooking}
+              onClick={() => {
+                onStartBooking();
+                setTimeout(() => {
+                  const el = document.getElementById('booking-wizard-section') || document.getElementById('booking-wizard-container');
+                  if (el) {
+                    const yOffset = -90;
+                    const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
+                    window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+                  }
+                }, 70);
+              }}
               className="btn-agendar-glow flex-1 sm:flex-none px-6 py-3.5 rounded-xl bg-[#20AAA8] hover:bg-[#18918f] font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer group active:scale-[0.98]"
             >
               <Calendar className="w-4 h-4 text-[#fff6e8]" />

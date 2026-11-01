@@ -28,11 +28,15 @@ export default function App() {
 
   const handleStartBooking = () => {
     setCurrentTab('agendar');
-    // Scroll smoothly to booking wizard
-    const wizardEl = document.getElementById('booking-wizard-section');
-    if (wizardEl) {
-      wizardEl.scrollIntoView({ behavior: 'smooth' });
-    }
+    // Scroll smoothly to booking wizard with offset for sticky header
+    setTimeout(() => {
+      const wizardEl = document.getElementById('booking-wizard-section') || document.getElementById('booking-wizard-container');
+      if (wizardEl) {
+        const yOffset = -90;
+        const y = wizardEl.getBoundingClientRect().top + window.pageYOffset + yOffset;
+        window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
+      }
+    }, 60);
   };
 
   return (
@@ -41,9 +45,14 @@ export default function App() {
       <Header
         currentTab={currentTab}
         onSelectTab={(tab) => {
-          setCurrentTab(tab);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          if (tab === 'agendar') {
+            handleStartBooking();
+          } else {
+            setCurrentTab(tab);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          }
         }}
+        onStartBooking={handleStartBooking}
         onOpenQR={() => setIsQRModalOpen(true)}
       />
 

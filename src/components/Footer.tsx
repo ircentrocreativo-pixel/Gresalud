@@ -134,21 +134,29 @@ export const Footer: React.FC<FooterProps> = ({ onSelectTab }) => {
             </h4>
             <ul className="space-y-2.5 text-xs text-slate-300">
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#20AAA8] shrink-0" />
+                <Phone className="w-4 h-4 text-[#25D366] shrink-0" />
                 <a
-                  href="tel:04123697465"
-                  className="hover:text-white transition-colors"
+                  href="https://wa.me/584123697465?text=Hola%20GRESALUD,%20deseo%20informaci%C3%B3n%20sobre%20consultas%20m%C3%A9dicas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#25D366] transition-colors flex items-center gap-1.5"
+                  title="Abrir WhatsApp oficial GRESALUD"
                 >
-                  0412-3697465
+                  <span className="font-medium text-slate-200">0412-3697465</span>
+                  <span className="text-[10px] bg-[#25D366]/20 text-[#25D366] px-1.5 py-0.5 rounded font-semibold">WhatsApp</span>
                 </a>
               </li>
               <li className="flex items-center gap-2">
-                <Phone className="w-4 h-4 text-[#20AAA8] shrink-0" />
+                <Phone className="w-4 h-4 text-[#25D366] shrink-0" />
                 <a
-                  href="tel:04129601785"
-                  className="hover:text-white transition-colors"
+                  href="https://wa.me/584129601785?text=Hola%20GRESALUD,%20deseo%20informaci%C3%B3n%20sobre%20consultas%20m%C3%A9dicas"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-[#25D366] transition-colors flex items-center gap-1.5"
+                  title="Abrir WhatsApp oficial GRESALUD"
                 >
-                  0412-9601785
+                  <span className="font-medium text-slate-200">0412-9601785</span>
+                  <span className="text-[10px] bg-[#25D366]/20 text-[#25D366] px-1.5 py-0.5 rounded font-semibold">WhatsApp</span>
                 </a>
               </li>
               <li className="flex items-center gap-2 pt-1">

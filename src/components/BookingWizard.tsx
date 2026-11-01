@@ -212,7 +212,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
       return;
     }
     if (!docNumber.trim()) {
-      setFormError('Por favor ingresa el documento de identidad.');
+      setFormError('Por favor ingresa la cédula de identidad.');
       return;
     }
     if (!patientPhone.trim() || patientPhone.trim().length < 8) {
@@ -808,34 +808,29 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Tipo Doc. <span className="text-rose-500">*</span>
-                </label>
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1">
+                Cédula de Identidad <span className="text-rose-500">*</span>
+              </label>
+              <div className="flex rounded-xl shadow-xs overflow-hidden border border-slate-300 focus-within:ring-2 focus-within:ring-[#20AAA8] focus-within:border-[#20AAA8]">
                 <select
                   value={docType}
                   onChange={(e) => setDocType(e.target.value as any)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#20AAA8] focus:outline-none text-sm bg-white"
+                  className="px-3.5 py-2.5 border-r border-slate-300 text-sm font-bold text-[#0B3E50] bg-slate-50 focus:outline-none cursor-pointer"
+                  title="Tipo de Cédula"
                 >
-                  <option value="V">V - Venezolano</option>
-                  <option value="E">E - Extranjero</option>
-                  <option value="P">P - Pasaporte</option>
-                  <option value="J">J - Jurídico</option>
+                  <option value="V">V-</option>
+                  <option value="E">E-</option>
+                  <option value="P">P-</option>
+                  <option value="J">J-</option>
                 </select>
-              </div>
-
-              <div className="sm:col-span-2">
-                <label className="block text-xs font-semibold text-slate-700 mb-1">
-                  Número de Documento <span className="text-rose-500">*</span>
-                </label>
                 <input
                   type="text"
                   required
-                  placeholder="Ej. 18234567"
+                  placeholder="Número de Cédula (Ej. 18234567)"
                   value={docNumber}
                   onChange={(e) => setDocNumber(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 focus:ring-2 focus:ring-[#20AAA8] focus:outline-none text-sm"
+                  className="w-full px-3.5 py-2.5 text-sm focus:outline-none bg-white font-medium"
                 />
               </div>
             </div>
@@ -1553,7 +1548,7 @@ export const BookingWizard: React.FC<BookingWizardProps> = ({
             </div>
             <ul className="list-disc list-inside space-y-0.5 text-blue-900/90 text-[11px]">
               <li>Llegar con 10 minutos de anticipación al Piso 3, Consultorio 302.</li>
-              <li>Presentar documento de identidad original en el módulo de recepción.</li>
+              <li>Presentar cédula de identidad original en el módulo de recepción.</li>
               <li>Traer informes médicos o exámenes previos relevantes para la consulta.</li>
               <li>Podrás confirmar tu asistencia o solicitar reprogramación hasta 12 horas antes.</li>
             </ul>
